@@ -1,0 +1,172 @@
+================================================================================
+  GESTURE-BASED CAR CONTROL SYSTEM - HOW TO PLAY WITH GAMES
+================================================================================
+
+🎮 CITY CAR DRIVING SIMULATOR INTEGRATION (RECOMMENDED)
+────────────────────────────────────────────────────────────────────────────
+
+GAME URL: https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+
+WHY THIS GAME?
+  ✓ Free to play (browser-based, no download)
+  ✓ Perfect WASD controls matching our system
+  ✓ Simple and fun
+  ✓ Great for testing gestures
+  ✓ Works immediately (no configuration)
+
+
+QUICK SETUP (5 MINUTES)
+────────────────────────────────────────────────────────────────────────────
+
+1. Install Dependencies
+   cd C:\Users\adity\Downloads\New-Project
+   pip install -r requirements.txt
+
+2. Open the Game
+   https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+   Click "Play"
+
+3. Start Control System
+   python main.py
+
+4. Position Windows Side-by-Side
+   Left: Webcam Window (40%)
+   Right: Game Window (60%)
+
+5. Click on Game Window
+   (This gives it keyboard focus)
+
+6. Drive!
+   Move face left/right for steering
+   Show palm to accelerate
+   Make fist to brake
+   Victory sign to reverse
+
+
+HOW TO CONTROL THE CAR
+────────────────────────────────────────────────────────────────────────────
+
+STEERING (Face Movement):
+  • Move head LEFT   → Car steers left
+  • Move head RIGHT  → Car steers right
+  • Head straight    → Car goes straight
+
+ACCELERATION (Hand Gesture):
+  • Show OPEN PALM   → Accelerate (speed up)
+  • Make CLOSED FIST → Brake (slow down)
+  • Victory Sign     → Reverse
+
+MANUAL KEYS:
+  • Press SPACE → Handbrake
+  • Press R → Reset car position
+  • Press C → Change camera
+  • Press ESC → Pause menu
+
+
+TROUBLESHOOTING
+────────────────────────────────────────────────────────────────────────────
+
+Problem: Game doesn't respond
+  Solution: Click on game window first (give it focus)
+
+Problem: Face/hand not detected
+  Solution: Improve lighting, move closer to webcam
+
+Problem: Slow/laggy response
+  Solution: Close other programs, check FPS counter
+
+Problem: Keys stuck
+  Solution: Close webcam window and press stuck key manually
+
+Problem: PyAutoGUI error
+  Solution: pip install pyautogui
+
+
+OTHER COMPATIBLE GAMES
+────────────────────────────────────────────────────────────────────────────
+
+DESKTOP GAMES (WASD controls):
+  ✓ GTA V / GTA Online
+  ✓ Assetto Corsa
+  ✓ BeamNG Drive
+  ✓ Euro Truck Simulator 2
+  ✓ American Truck Simulator
+  ✓ Forza Horizon 5
+  ✓ Need for Speed
+
+WEB GAMES:
+  ✓ City Car Driving Simulator
+  ✓ CrazyGames car/racing games
+  ✓ Y8 games
+  ✓ Pogo games
+
+
+QUICK COMMANDS
+────────────────────────────────────────────────────────────────────────────
+
+Start System:
+  python main.py
+
+Setup Wizard:
+  python setup.py
+
+View Game Configs:
+  python game_config.py
+
+View Integration Guide:
+  python INTEGRATION_GUIDE.py
+
+Launcher Menu:
+  launch.bat  (or double-click)
+
+
+FILES IN PROJECT
+────────────────────────────────────────────────────────────────────────────
+
+main.py                 - Main control system (RUN THIS!)
+face_control.py         - Face detection for steering
+hand_control.py         - Hand gesture for movement
+setup.py                - Interactive setup wizard
+game_config.py          - Game configurations
+INTEGRATION_GUIDE.py    - Detailed integration guide
+QUICK_START.md          - Quick reference guide
+HOW_TO_PLAY.txt         - This file
+launch.bat              - Windows launcher menu
+requirements.txt        - Python dependencies
+README.md               - Original documentation
+
+
+NEXT STEPS
+────────────────────────────────────────────────────────────────────────────
+
+1. Make sure dependencies are installed:
+   pip install -r requirements.txt
+
+2. Open City Car Driving:
+   https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+
+3. Start control system:
+   python main.py
+
+4. Position windows side by side
+
+5. Click game window
+
+6. START DRIVING! 🚗
+
+
+HAVE FUN!
+────────────────────────────────────────────────────────────────────────────
+
+Enjoy controlling your game with face and hand gestures!
+
+For more help, see:
+  - QUICK_START.md
+  - INTEGRATION_GUIDE.py
+  - game_config.py
+
+Questions? Check these files first!
+
+Ready to drive? Let's go! 🎮
+
+================================================================================

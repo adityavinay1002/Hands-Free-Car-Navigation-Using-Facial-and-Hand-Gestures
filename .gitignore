@@ -1,0 +1,28 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output folders (edit if you use different names)
+outputs/
+output/
+videos/
+uploads/
+
+# Secrets
+.env
+EOF

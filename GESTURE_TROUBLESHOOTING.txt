@@ -1,0 +1,33 @@
+GESTURE CONTROL TROUBLESHOOTING GUIDE (Full AI Version)
+=========================================================
+
+STEP 1: CHECK DETECTION
+-----------------------
+Run `python main.py`.
+
+1. **FACE TRACKING**: Do you see a mesh over your face?
+   - **Move Head LEFT**: Does it say "STEERING: LEFT"?
+   - **Move Head RIGHT**: Does it say "STEERING: RIGHT"?
+   - **Note**: You must move your head physically left/right in the camera frame, not just rotate.
+
+2. **HAND TRACKING**: Do you see skeleton on your hand?
+   - **OPEN PALM**: "ACCELERATING (W)"
+   - **FIST**: "BRAKING (SPACE)"
+   - **VICTORY**: "REVERSING (S)"
+
+STEP 2: GAMEPLAY ISSUES
+-----------------------
+1. **Game Ignored Keys**:
+   - **CLICK THE GAME**. The browser MUST be the active window.
+   - **Run as Administrator**.
+   
+2. **Car Not Acting Right**:
+   - **Steering Weak?**: Move your head further to the side.
+   - **Brake not working?**: Check if the game uses 'SPACE' for brake. If not, edit `main.py` to use expected key (e.g. 'down' arrow).
+   
+3. **Lag**:
+   - Close other apps. MediaPipe uses CPU.
+
+STEP 3: CRASHES
+---------------
+- Ensure `mediapipe==0.10.9` is installed.
