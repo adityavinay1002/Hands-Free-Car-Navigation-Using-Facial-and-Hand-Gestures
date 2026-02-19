@@ -36,42 +36,64 @@ class KeyboardController:
         """Configure PyAutoGUI."""
         if HAS_PYAUTOGUI:
             pyautogui.FAILSAFE = False
+            pyautogui.PAUSE = 0
     
     @staticmethod
     def press_key(key):
         """Press a key."""
-        # Only press if not already pressed, OR if we want to re-assert (but avoid spamming log)
-        if HAS_PYAUTOGUI:
-            try:
-                # If key already pressed, just keep it down, don't spam log
-                if key not in KeyboardController.pressed_keys:
-                    print(f"[DEBUG] Pressing key: {key}")
-                
-                pyautogui.keyDown(key)
-                KeyboardController.pressed_keys.add(key)
-            except Exception as e:
-                print(f"[ERROR] Failed to press {key}: {e}")
-    
+        if key not in KeyboardController.pressed_keys:
+            print(f"[DEBUG] Pressing key: {key}")
+            if HAS_PYAUTOGUI:
+                try:
+                    pyautogui.keyDown(key)
+                except Exception as e:
+                    print(f"[ERROR] Failed to press {key}: {e}")
+            # Always add to set so UI can display it
+            KeyboardController.pressed_keys.add(key)
+
     @staticmethod
     def release_key(key):
         """Release a key."""
-        if HAS_PYAUTOGUI and key in KeyboardController.pressed_keys:
-            try:
-                print(f"[DEBUG] Releasing key: {key}")
-                pyautogui.keyUp(key)
-                KeyboardController.pressed_keys.discard(key)
-            except Exception:
-                pass
-    
-    @staticmethod
-    def release_all():
-        """Release all keys."""
-        for key in list(KeyboardController.pressed_keys):
+        if key in KeyboardController.pressed_keys:
+            print(f"[DEBUG] Releasing key: {key}")
             if HAS_PYAUTOGUI:
                 try:
                     pyautogui.keyUp(key)
-                except:
+                except Exception:
                     pass
+            # Always remove from set so UI updates
+            KeyboardController.pressed_keys.discard(key)
+
+    @staticmethod
+    def sync(desired_keys):
+        """
+        Synchronize current pressed keys with desired keys.
+        Only calls keyDown/keyUp on state changes.
+        Updates state even if PyAutoGUI is missing (for HUD).
+        """
+        # Keys to release: currently pressed but not desired
+        to_release = list(KeyboardController.pressed_keys - desired_keys)
+        for key in to_release:
+            KeyboardController.release_key(key)
+
+        # Keys to press: desired but not currently pressed
+        to_press = list(desired_keys - KeyboardController.pressed_keys)
+        for key in to_press:
+            KeyboardController.press_key(key)
+
+    @staticmethod
+    def release_all():
+        """Release all keys."""
+        if not HAS_PYAUTOGUI:
+            KeyboardController.pressed_keys.clear()
+            return
+
+        for key in list(KeyboardController.pressed_keys):
+            try:
+                print(f"[DEBUG] Releasing key: {key}")
+                pyautogui.keyUp(key)
+            except:
+                pass
         KeyboardController.pressed_keys.clear()
 
 
@@ -136,54 +158,36 @@ class CarControlSystem:
         self.prev_frame_time = current_time
         self.frame_count += 1
     
-    def _handle_steering(self, direction):
+    def _update_controls(self, direction, gesture):
         """
-        Handle steering control.
-        CONTINUOUS HOLDING: Re-assert key down every frame.
+        Aggregates desired keys based on direction and gesture,
+        then synchronizes with the keyboard controller.
+        STRICT PRIORITY: FIST/REVERSE overrides ALL steering/acceleration.
         """
-        # Always release conflicting key FIRST
-        if direction == "LEFT":
-            KeyboardController.release_key('d')
-            KeyboardController.press_key('a')
-        elif direction == "RIGHT":
-            KeyboardController.release_key('a')
-            KeyboardController.press_key('d')
-        else:  # CENTER
-            KeyboardController.release_key('a')
-            KeyboardController.release_key('d')
-            
+        desired_keys = set()
+
+        if gesture in ["FIST", "REVERSE"]:
+            # Rule 4: Hold 'S' only, release EVERYTHING else
+            desired_keys.add('s')
+        else:
+            # Rule 1-3: Steering logic
+            if direction == "CENTER":
+                desired_keys.add('w')
+            elif direction == "LEFT":
+                desired_keys.add('a')
+                # Explicitly not adding 'w' because steering LEFT releases 'W'
+            elif direction == "RIGHT":
+                desired_keys.add('d')
+                # Explicitly not adding 'w' because steering RIGHT releases 'W'
+
+            # Rule 4 extension: PALM keeps/adds 'W'
+            if gesture == "PALM":
+                desired_keys.add('w')
+
+        # Synchronize keys
+        KeyboardController.sync(desired_keys)
+        
         self.last_steering_direction = direction
-    
-    def _handle_movement(self, gesture):
-        """
-        Handle movement control.
-        CONTINUOUS HOLDING: Re-assert key down every frame.
-        """
-        # Always release conflicting keys FIRST
-        if gesture == "PALM":
-             # Accelerate (W)
-             KeyboardController.release_key('s')
-             KeyboardController.release_key('space')
-             KeyboardController.press_key('w')
-             
-        elif gesture == "FIST":
-             # Brake (SPACE)
-             KeyboardController.release_key('w')
-             KeyboardController.release_key('s')
-             KeyboardController.press_key('space')
-             
-        elif gesture == "REVERSE":
-             # Reverse (S)
-             KeyboardController.release_key('w')
-             KeyboardController.release_key('space')
-             KeyboardController.press_key('s')
-             
-        elif gesture == "NONE":
-             # Stop all movement
-             KeyboardController.release_key('w')
-             KeyboardController.release_key('s')
-             KeyboardController.release_key('space')
-             
         self.last_movement_gesture = gesture
     
     def _draw_ui(self, frame, direction, gesture):
@@ -214,7 +218,7 @@ class CarControlSystem:
             "CENTER": (0, 255, 0)
         }.get(direction, (255, 255, 255))
         
-        steering_symbol = {"LEFT": "◄◄", "RIGHT": "►►", "CENTER": "▶"}
+        steering_symbol = {"LEFT": "<<", "RIGHT": ">>", "CENTER": ">"}
         cv2.putText(
             frame,
             f"STEERING: {steering_symbol.get(direction, '?')} {direction}",
@@ -233,7 +237,7 @@ class CarControlSystem:
             "NONE": (128, 128, 128)
         }.get(gesture, (255, 255, 255))
         
-        movement_symbol = {"PALM": "🤚", "FIST": "✊", "REVERSE": "✌️", "NONE": ""}
+        movement_symbol = {"PALM": "UP", "FIST": "X", "REVERSE": "V", "NONE": ""}
         cv2.putText(
             frame,
             f"MOVEMENT: {gesture}",
@@ -317,9 +321,8 @@ class CarControlSystem:
                 # Detect hand gesture for movement
                 frame, movement_gesture = self.hand_detector.detect_gesture(frame, draw=True)
                 
-                # Apply control
-                self._handle_steering(steering_direction)
-                self._handle_movement(movement_gesture)
+                # Apply control updates
+                self._update_controls(steering_direction, movement_gesture)
                 
                 # Draw UI
                 frame = self._draw_ui(frame, steering_direction, movement_gesture)
