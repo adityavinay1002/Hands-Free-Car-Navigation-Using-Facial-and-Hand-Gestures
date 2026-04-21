@@ -171,14 +171,10 @@ class CarControlSystem:
             desired_keys.add('s')
         else:
             # Rule 1-3: Steering logic
-            if direction == "CENTER":
-                desired_keys.add('w')
-            elif direction == "LEFT":
+            if direction == "LEFT":
                 desired_keys.add('a')
-                # Explicitly not adding 'w' because steering LEFT releases 'W'
             elif direction == "RIGHT":
                 desired_keys.add('d')
-                # Explicitly not adding 'w' because steering RIGHT releases 'W'
 
             # Rule 4 extension: PALM keeps/adds 'W'
             if gesture == "PALM":
@@ -263,15 +259,15 @@ class CarControlSystem:
         
         # --- NEW: ACTIVE STATUS OVERLAY ---
         # Draw a big visible status notification in the center/bottom
-        status_text = ""
-        status_color = (128, 128, 128)
+        status_text = "NEUTRAL"
+        status_color = (128, 128, 128) # Gray or White (Wait, I will use light gray as neutral)
         
         if "w" in active_keys:
             status_text = "ACCELERATING (W)"
             status_color = (0, 255, 0) # Green
         elif "s" in active_keys:
-            status_text = "REVERSING (S)"
-            status_color = (0, 165, 255) # Orange
+            status_text = "BRAKE"
+            status_color = (0, 0, 255) # Red
         elif gesture == "FIST":
             status_text = "BRAKING (FIST)"
             status_color = (0, 0, 255) # Red
