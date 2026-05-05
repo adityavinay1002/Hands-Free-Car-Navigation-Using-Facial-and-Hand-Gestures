@@ -79,12 +79,13 @@ with web-based games like City Car Driving Simulator Ultimate on CrazyGames.
 # ============================================================================
 
 """
-CITY CAR DRIVING SIMULATOR ULTIMATE (CrazyGames)
+MR RACER CAR RACING (POKI Games)
 ────────────────────────────────────────────────
 
 URL: https://poki.com/en/g/mr-racer-car-racing
 
 Controls:
+  ✓ T = Engine ON/OFF
   ✓ W = Accelerate
   ✓ S = Reverse
   ✓ A = Left
