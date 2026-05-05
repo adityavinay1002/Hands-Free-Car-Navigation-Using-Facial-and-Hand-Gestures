@@ -114,7 +114,10 @@ class CarControlSystem:
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         
         # Initialize detectors
-        self.head_detector = HeadTiltDetector()
+        self.head_detector = HeadTiltDetector(
+    tilt_threshold=0.10,   # 🔽 reduced from 0.15 → more sensitive
+    smoothing=4            # slightly faster response
+)
         self.hand_detector = HandGestureDetector()
         
         # Performance tracking
@@ -126,6 +129,7 @@ class CarControlSystem:
         # State tracking
         self.last_steering_direction = "CENTER"
         self.last_movement_gesture = "NONE"
+        self.control_enabled = False
         
         # Configure keyboard
         KeyboardController.configure()
@@ -318,7 +322,10 @@ class CarControlSystem:
                 frame, movement_gesture = self.hand_detector.detect_gesture(frame, draw=True)
                 
                 # Apply control updates
-                self._update_controls(steering_direction, movement_gesture)
+                if self.control_enabled:
+                    self._update_controls(steering_direction, movement_gesture)
+                else:
+                    KeyboardController.release_all()
                 
                 # Draw UI
                 frame = self._draw_ui(frame, steering_direction, movement_gesture)
@@ -331,6 +338,9 @@ class CarControlSystem:
                 
                 # Handle input
                 key = cv2.waitKey(1) & 0xFF
+                if key == ord('t'):
+                    self.control_enabled = not self.control_enabled
+                    print("Control:", "ON" if self.control_enabled else "OFF")
                 if key == 27 or key == ord('q'):  # ESC or Q
                     print("\n⏹️  Closing application...")
                     break

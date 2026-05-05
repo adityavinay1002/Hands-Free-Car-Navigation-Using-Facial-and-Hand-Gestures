@@ -10,7 +10,7 @@ import numpy as np
 class HeadTiltDetector:
     """Detects head position using MediaPipe Face Mesh."""
     
-    def __init__(self, tilt_threshold=0.15, smoothing=5):
+    def __init__(self, tilt_threshold=0.10, smoothing=5):
         """
         Initialize MediaPipe Face Mesh.
         tilt_threshold: Percentage of screen width to trigger turn (0.15 = 15%)

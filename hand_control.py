@@ -17,8 +17,8 @@ class HandGestureDetector:
             static_image_mode=False,
             max_num_hands=1,
             model_complexity=0, # LITE model for speed
-            min_detection_confidence=0.5,
-            min_tracking_confidence=0.5
+            min_detection_confidence=0.6,
+            min_tracking_confidence=0.6
         )
         self.mp_draw = mp.solutions.drawing_utils
         
@@ -70,17 +70,19 @@ class HandGestureDetector:
                 # Check thumb separately or just rely on 4 fingers
                 # Gestures:
                 
-                if up_fingers == 4: # 4 fingers up (Index, Middle, Ring, Pinky)
-                    raw_gesture = "PALM"
-                elif up_fingers == 0: # 0 fingers up
-                    raw_gesture = "FIST"
-                elif up_fingers == 2 and fingers[1] == 1 and fingers[2] == 1:
-                    # Index and Middle up only
-                    raw_gesture = "REVERSE"
-                
-                # Correction for "PALM" - if thumb is closed it might be 4 fingers
+                # --- CLEAN & STABLE GESTURE LOGIC ---
+
                 if up_fingers >= 3:
-                     raw_gesture = "PALM"
+                    raw_gesture = "PALM"
+
+                elif up_fingers <= 1:
+                    raw_gesture = "FIST"
+
+                elif up_fingers == 2 and fingers[1] == 1 and fingers[2] == 1:
+                    raw_gesture = "REVERSE"
+
+                else:
+                    raw_gesture = "NONE"
 
                 if draw:
                     self.mp_draw.draw_landmarks(
