@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ### Step 2: Choose Your Game
 
 **Web Game (Recommended for testing):**
-- City Car Driving Simulator: https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+- MR Racer Car Racing: https://poki.com/en/g/mr-racer-car-racing
 - Just open in browser, click Play
 
 **Desktop Games:**
@@ -58,7 +58,7 @@ The game uses standard WASD controls that match our system perfectly.
 ### Step-by-Step:
 
 1. **Open Game**
-   - Go to: https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+   - Go to: https://poki.com/en/g/mr-racer-car-racing
    - Click "Play"
    - Wait for game to load
 
