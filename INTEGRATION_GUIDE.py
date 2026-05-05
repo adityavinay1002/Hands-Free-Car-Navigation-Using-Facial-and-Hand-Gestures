@@ -24,7 +24,7 @@ with web-based games like City Car Driving Simulator Ultimate on CrazyGames.
 
 """
 1. OPEN THE GAME IN BROWSER
-   • Go to: https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+   • Go to: https://poki.com/en/g/mr-racer-car-racing
    • Wait for game to fully load
    • Click "Play" to start
 
@@ -82,7 +82,7 @@ with web-based games like City Car Driving Simulator Ultimate on CrazyGames.
 CITY CAR DRIVING SIMULATOR ULTIMATE (CrazyGames)
 ────────────────────────────────────────────────
 
-URL: https://www.crazygames.com/game/city-car-driving-simulator-ultimate
+URL: https://poki.com/en/g/mr-racer-car-racing
 
 Controls:
   ✓ W = Accelerate
